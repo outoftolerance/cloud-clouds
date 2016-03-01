@@ -7,12 +7,37 @@ import RPi.GPIO as GPIO
 #define global variables
 LED_FREQ = 1000	#frequency of LED PWM switching
 
+#define all the functions we need in the program
+#function to start all the pins with current duty cycle
+def startLeds( leds, duty_cycles ):
+	"Function turns on all LEDs in array of LED objects provided"
+	print "\nStarting all LEDs!"
+	for index in range(len(leds)):
+		leds[index].start(duty_cycles[index])
+	return
+
+#function to stop all pins
+def stopLeds( leds ):
+	"Turns off all LEDs in array of LED objects provided"
+	print "\nSwitching off all LEDs!"
+	for index in range(len(leds)):
+		leds[index].stop()
+	return
+
+#function to update the pin duty cylces
+def updateLeds( leds, duty_cycles ):
+	"Updates all leds with latest duty cycle provided"
+	print "\nUpdating LED duty cycles!"
+	for index in range(len(leds)):
+		leds[index].ChangeDutyCycle(duty_cycles[index])
+	return
+
 #welcome statements
 print "\nCloud Clouds is starting..."
 
 #setup GPIO output pins
 print "\nSetting up GPIO pins and libraries..."
-GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
 GPIO.setup(0, GPIO.OUT)	#LED Red 1
 GPIO.setup(1, GPIO.OUT)	#LED Green 1
 GPIO.setup(2, GPIO.OUT)	#LED Blue 1
@@ -37,27 +62,5 @@ startLeds(leds, duty_cycles)
 while (1):
 	print "\nMain program loop started."
 	updateLeds( leds, duty_cycles)
+	time.sleep(0.1)
 
-#function to start all the pins with current duty cycle
-def startLeds( leds, duty_cycles ):
-	"Function turns on all LEDs in array of LED objects provided"
-	print "\nStarting all LEDs!"
-	for index in range(len(leds)):
-		leds[index].start(duty_cycles[index])
-	return
-
-#function to stop all pins
-def stopLeds( leds ):
-	"Turns off all LEDs in array of LED objects provided"
-	print "\nSwitching off all LEDs!"
-	for index in range(len(leds)):
-		leds[index].stop()
-	return
-
-#function to update the pin duty cylces
-def updateLeds( leds, duty_cycles ):
-	"Updates all leds with latest duty cycle provided"
-	print "\nUpdating LED duty cycles!"
-	for index in range(len(leds)):
-		leds[index].ChangeDutyCycle(duty_cycles[index])
-	return

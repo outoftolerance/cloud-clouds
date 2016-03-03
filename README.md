@@ -2,7 +2,7 @@
 
 Cloud Clouds is a project designed to create indoor cloud like lighting which can mimic realistic outdoor weather patterns using LED lighting and a variety of sound effects. The core of the project is the Raspberry Pi embedded computer, which manages the lighting effects, sound effects, communications with online weather APIs, and much more. This repository stores the code required to enable these features.
 
-> The overriding design goal for this project was to create an IoT connected object which would bring a bit of nature indoors, creating a better living and work environment for inhabitants of the space, and enable them to connect with the environment in a technologically interresting way. (Additionally it meets the criteria for the final project of MECH 423 at the university of British Columbia!)
+> The overriding design goal for this project was to create an IoT connected object which would bring a bit of nature indoors, creating a better living and work environment for inhabitants of the space, and enable them to connect with the environment in a technologically interresting way. (Additionally it meets the criteria for the final project of MECH 423 at the University of British Columbia!)
 
 See more about the project and how you can make it at James' website: [Out Of Tolerance](https://www.outoftolerance.com/projects "Out Of Tolerance")
 

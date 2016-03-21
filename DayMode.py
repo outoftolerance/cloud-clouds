@@ -1,4 +1,4 @@
-########################### Day Mode ############################
+###################### Day Mode Functions #######################
 #################################################################
 # Objective: 	Extract data from Weather.com using API
 #				Define weather status to LED function
@@ -6,9 +6,19 @@
 
 import pywapi
 
-location = "CAXX0518"
+# Get user input for mode
+def GetMode ():
+	#Different Modes
+	weatherMode = 1
+	lampMode = 2
+	partyMode = 3
 
-def RunWeatherStatus( location )
+	mode = raw_input("Select Mode Number: 1-Weather; 2-Lamp; 3-Party\n")
+
+	return
+
+# Update weather data
+def RunWeatherStatus( location ):
 	weatherResult = pywapi.get_weather_from_weather_com(location)
 	weatherStatus = weatherResult["current_conditions"]["text"]
 
@@ -35,6 +45,7 @@ def RunWeatherStatus( location )
 		print("Clear")
 
 	return
+
 
 
 

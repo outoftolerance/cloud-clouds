@@ -1,10 +1,9 @@
-########################### Select Mode #########################
+########################### Main File ###########################
 #################################################################
-# Objective:	Based on mode, run script.
 
 import time
 import datetime			# Structure defined as datetime(Year, Month, Day, Hour, Minute Second, Millisecond)
-import DayMode			# Defines function RunWeatherStatus( location )
+import CloudFunctions	# Defines function 
 
 location = "CAXX0518"	# Vancouver-Canada
 

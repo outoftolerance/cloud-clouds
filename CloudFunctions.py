@@ -1,8 +1,6 @@
-###################### Day Mode Functions #######################
+########################### Functions ###########################
 #################################################################
-# Objective: 	Extract data from Weather.com using API
-#				Define weather status to LED function
-#				Update the weather status every hour
+
 
 import pywapi
 
@@ -19,7 +17,7 @@ def GetMode ():
 
 # Update weather data
 def RunWeatherStatus( location ):
-	weatherResult = pywapi.get_weather_from_weather_com(location)
+	weatherResult = pywapi.get_weather_from_weather_com(location, units = "metric" )
 	weatherStatus = weatherResult["current_conditions"]["text"]
 
 	if weatherStatus == ("Cloudy" or "Partly Cloudy" or "Mostly Cloudy" or "Overcast"):
@@ -40,7 +38,7 @@ def RunWeatherStatus( location ):
 	elif weatherStatus == ("Fog" or "Smoke" or "Dust" or "Haze" or "Mist"):
 		#LED setting for Fog
 		print("Fog")
-	else
+	else:
 		#LED setting for Clear - the default daytime setting
 		print("Clear")
 

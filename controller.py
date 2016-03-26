@@ -42,7 +42,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(0, GPIO.OUT)	#LED Red 1
 GPIO.setup(1, GPIO.OUT)	#LED Green 1
 GPIO.setup(2, GPIO.OUT)	#LED Blue 1
-#LED Strip 2
+#LED Strip 2w
 GPIO.setup(4, GPIO.OUT)	#LED Red 2
 GPIO.setup(5, GPIO.OUT)	#LED Green 2
 GPIO.setup(6, GPIO.OUT)	#LED Blue 2

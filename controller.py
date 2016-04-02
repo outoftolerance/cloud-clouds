@@ -106,4 +106,4 @@ while (1):
 		updateLeds( leds, duty_cycles)
 
 		#wait for some time for the changes to take effect
-		time.sleep(0.2)
+		#time.sleep(0.2)

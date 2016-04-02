@@ -1,8 +1,16 @@
 ########################### Functions ###########################
 #################################################################
 
+# Import libraries
+import pywapi		#Weather API library
+import pygame		#Pythong library for sound, keyboard entries, etc...
+import time
+import datetime			# Structure defined as datetime(Year, Month, Day, Hour, Minute Second, Millisecond)
 
-import pywapi
+
+# Variable definitions
+location = "CAXX0518"	# Vancouver-Canada
+
 
 # Get user input for mode
 def GetMode ():

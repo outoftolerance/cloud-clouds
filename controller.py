@@ -6,7 +6,7 @@ import RPi.GPIO as GPIO
 #import CloudFunctions
 
 #turn off meaningless warnings
-GPIO.setWarnings(False)
+GPIO.setwarnings(False)
 
 #define global variables defaults
 LED_FREQ = 1000	#frequency of LED PWM switching

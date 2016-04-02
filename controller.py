@@ -110,7 +110,7 @@ led = GPIO.PWM(11, LED_FREQ)
 leds.append(led)
 
 #create an array to store all the led pin duty cycles
-duty_cycles = [1, 1, 1, 1, 1, 1, 1, 1, 1]
+duty_cycles = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 #start all the leds
 startLeds(leds, duty_cycles)
@@ -119,40 +119,40 @@ startLeds(leds, duty_cycles)
 #inifite, just updates the LED duty cycles from the duty_cycles array and drives them up and down
 while (1):
 	print "\nMain program loop started."
-
-	#check what mode we are in and run appropriate function
-	if MODE == "mirror":
-		print "\nGetting latest from weather mirror mode"
-		mirrorWeatherMode(duty_cycles)
-	elif MODE == "invert":
-		print "\nGetting latest from weather invert mode"
-		invertWeatherMode(duty_cycles)
-	else:
-		print "\nGetting latest from lamp mode"
-		lampMode(duty_cycles, DEFAULT_COLOR)
-
-	#update the LED duty cycles
-	print "\nUpdating LED duty cycles."
-	updateLeds(leds, duty_cycles)
+#
+#	#check what mode we are in and run appropriate function
+#	if MODE == "mirror":
+#		print "\nGetting latest from weather mirror mode"
+#		mirrorWeatherMode(duty_cycles)
+#	elif MODE == "invert":
+#		print "\nGetting latest from weather invert mode"
+#		invertWeatherMode(duty_cycles)
+#	else:
+#		print "\nGetting latest from lamp mode"
+#		lampMode(duty_cycles, DEFAULT_COLOR)
+#
+#	#update the LED duty cycles
+#	print "\nUpdating LED duty cycles."
+#	updateLeds(leds, duty_cycles)
 
 	#update the duty cycles from 0% to 100%
-	#for i in range(0, 100, 1):
-	#	for j in range(len(duty_cycles)):
-	#		duty_cycles[j] = i
+	for i in range(0, 100, 1):
+		for j in range(len(duty_cycles)):
+			duty_cycles[j] = i
 
 		#send new duty cyles to LEDs
-	#	updateLeds( leds, duty_cycles)
+		updateLeds( leds, duty_cycles)
 
 		#wait for some time for the changes to take effect
-	#	time.sleep(0.1)
+		time.sleep(0.01)
 
 	#update the duty cycles from 100% to 0%
-	#for i in range(100, 0, -1):
-	#	for j in range(len(duty_cycles)):
-	#		duty_cycles[j] = i
+	for i in range(100, 0, -1):
+		for j in range(len(duty_cycles)):
+			duty_cycles[j] = i
 			
 		#send new duty cyles to LEDs
-	#	updateLeds( leds, duty_cycles)
+		updateLeds( leds, duty_cycles)
 
 		#wait for some time for the changes to take effect
-	#	time.sleep(0.1)
+		time.sleep(0.01)

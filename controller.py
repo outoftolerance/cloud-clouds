@@ -121,10 +121,10 @@ while (1):
 	print "\nMain program loop started."
 
 	#check what mode we are in and run appropriate function
-	if mode == "mirror":
+	if MODE == "mirror":
 		print "\nGetting latest from weather mirror mode"
 		mirrorWeatherMode(duty_cycles)
-	elif mode == "invert":
+	elif MODE == "invert":
 		print "\nGetting latest from weather invert mode"
 		invertWeatherMode(duty_cycles)
 	else:

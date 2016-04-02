@@ -9,7 +9,7 @@ import RPi.GPIO as GPIO
 GPIO.setwarnings(False)
 
 #define global variables defaults
-LED_FREQ = 120	#frequency of LED PWM switching
+LED_FREQ = 60	#frequency of LED PWM switching
 LOCATION = "CAXX0518"	#location of the weather we want
 MODE = "mirror"	#mode we want to be in (default is mirror weather at location)
 

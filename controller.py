@@ -56,6 +56,8 @@ def lampMode(duty_cycles, DEFAULT_COLOR):
 	for channel in range(0, 6, 3):
 		for colour in range (0, 2, 1):
 			duty_cycles[channel + colour] = DEFAULT_COLOR[colour]
+			print "\nupdating pin"
+			print (channel+colour)
 	return
 
 #function for pulsing mode

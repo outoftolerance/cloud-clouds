@@ -2,11 +2,11 @@
 #import all the libraries and elements that we need
 import time
 import sys
-import RPi.GPIO as GPIO
+import pigpio
 #import CloudFunctions
 
-#turn off meaningless warnings
-GPIO.setwarnings(False)
+#setup a pi object
+pi = pigpio.pi()
 
 #define global variables defaults
 LED_FREQ = 120	#frequency of LED PWM switching
@@ -29,7 +29,7 @@ def startLeds( leds, duty_cycles ):
 	"Function turns on all LEDs in array of LED objects provided"
 	print "\nStarting all LEDs!"
 	for index in range(len(leds)):
-		leds[index].start(duty_cycles[index])
+		pi.set_PWM_dutycycle(leds[index], duty_cycles[index])
 	return
 
 #function to stop all pins
@@ -37,7 +37,7 @@ def stopLeds( leds ):
 	"Turns off all LEDs in array of LED objects provided"
 	print "\nSwitching off all LEDs!"
 	for index in range(len(leds)):
-		leds[index].stop()
+		pi.set_PWM_dutycycle(leds[index], 0)
 	return
 
 #function to update the pin duty cylces
@@ -45,7 +45,8 @@ def updateLeds( leds, duty_cycles ):
 	"Updates all leds with latest duty cycle provided"
 	print "\nUpdating LED duty cycles!"
 	for index in range(len(leds)):
-		leds[index].ChangeDutyCycle(duty_cycles[index])
+		pi.set_PWM_dutycycle(leds[index], duty_cycles[index])
+		pi.stop()
 	return
 
 #function to define lamp mode
@@ -53,7 +54,7 @@ def lampMode(duty_cycles, DEFAULT_COLOR):
 	"Outputs duty cycle values based on lamp mode and default colour"
 	for channel in range(0, 2, 1):
 		for colour in range (0, 2, 1):
-			duty_cycles[channel + colour] = DEFAULT_COLOR[colour] * 100 / 255
+			duty_cycles[channel + colour] = DEFAULT_COLOR[colour]
 	return
 
 #function which runs the duty cycles for weather mode
@@ -71,45 +72,7 @@ print "\nCloud Clouds is starting..."
 
 #setup GPIO output pins
 print "\nSetting up GPIO pins and libraries..."
-GPIO.setmode(GPIO.BCM)
-#LED Strip 1
-GPIO.setup(17, GPIO.OUT)	#LED Red 1
-GPIO.setup(18, GPIO.OUT)	#LED Green 1
-GPIO.setup(27, GPIO.OUT)	#LED Blue 1
-#LED Strip 2w
-GPIO.setup(23, GPIO.OUT)	#LED Red 2
-GPIO.setup(24, GPIO.OUT)	#LED Green 2
-GPIO.setup(25, GPIO.OUT)	#LED Blue 2
-#LED Strip 3
-GPIO.setup(10, GPIO.OUT)	#LED Red 3
-GPIO.setup(9, GPIO.OUT)	#LED Green 3
-GPIO.setup(11, GPIO.OUT)	#LED Blue 3
-
-#create an array to store all the led objects
-leds = []
-#LED Strip 1
-led = GPIO.PWM(17, LED_FREQ)
-leds.append(led)
-led = GPIO.PWM(18, LED_FREQ)
-leds.append(led)
-led = GPIO.PWM(27, LED_FREQ)
-leds.append(led)
-#LED strip 2
-led = GPIO.PWM(23, LED_FREQ)
-leds.append(led)
-led = GPIO.PWM(24, LED_FREQ)
-leds.append(led)
-led = GPIO.PWM(25, LED_FREQ)
-leds.append(led)
-#LED strip 3
-led = GPIO.PWM(10, LED_FREQ)
-leds.append(led)
-led = GPIO.PWM(9, LED_FREQ)
-leds.append(led)
-led = GPIO.PWM(11, LED_FREQ)
-leds.append(led)
-
-#create an array to store all the led pin duty cycles
+leds = [17, 18, 27, 23, 24, 25, 10, 9, 11]
 duty_cycles = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 #start all the leds
@@ -136,7 +99,7 @@ while (1):
 #	updateLeds(leds, duty_cycles)
 
 	#update the duty cycles from 0% to 100%
-	for i in range(0, 100, 1):
+	for i in range(0, 255, 1):
 		for j in range(len(duty_cycles)):
 			duty_cycles[j] = i
 
@@ -147,7 +110,7 @@ while (1):
 		time.sleep(0.01)
 
 	#update the duty cycles from 100% to 0%
-	for i in range(100, 0, -1):
+	for i in range(255, 0, -1):
 		for j in range(len(duty_cycles)):
 			duty_cycles[j] = i
 			

@@ -104,21 +104,21 @@ while (1):
 	#update the duty cycles from 0% to 100%
 	for i in range(0, 100, 1):
 		for j in range(len(duty_cycles)):
-			duty_cycles[j] = i
+			duty_cycles[j] = i/100
 
 		#send new duty cyles to LEDs
 		updateLeds( leds, duty_cycles)
 
 		#wait for some time for the changes to take effect
-		time.sleep(1)
+		time.sleep(0.1)
 
 	#update the duty cycles from 100% to 0%
 	for i in range(100, 0, -1):
 		for j in range(len(duty_cycles)):
-			duty_cycles[j] = i
+			duty_cycles[j] = i/100
 			
 		#send new duty cyles to LEDs
 		updateLeds( leds, duty_cycles)
 
 		#wait for some time for the changes to take effect
-		time.sleep(1)
+		time.sleep(0.1)

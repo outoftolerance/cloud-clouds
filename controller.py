@@ -46,7 +46,8 @@ def updateLeds( leds, duty_cycles ):
 	"Updates all leds with latest duty cycle provided"
 	print "\nUpdating LED duty cycles!"
 	for index in range(len(leds)):
-		pi.set_PWM_dutycycle(leds[index], duty_cycles[index])
+		real_brightness = int(int(duty_cycles[index]) * (float(255) / 255.0))
+		pi.set_PWM_dutycycle(leds[index], real_brightness)
 	return
 
 #function to define lamp mode

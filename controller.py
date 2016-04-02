@@ -13,11 +13,11 @@ MODE = "mirror"	#mode we want to be in (default is mirror weather at location)
 #open the settings file and grab all our globals from there
 config = open("settings.conf", "r")
 line = config.readline()
-print "Line Read: " % line
+print "Line Read: " % (line)
 line = config.readline()
-print "Line Read: " % line
+print "Line Read: " % (line)
 line = config.readline()
-print "Line Read: " % line
+print "Line Read: " % (line)
 
 #define all the functions we need in the program
 #function to start all the pins with current duty cycle

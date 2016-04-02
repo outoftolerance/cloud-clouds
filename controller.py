@@ -11,7 +11,7 @@ LOCATION = "CAXX0518"	#location of the weather we want
 MODE = "mirror"	#mode we want to be in (default is mirror weather at location)
 
 #open the settings file and grab all our globals from there
-config = open("settings.conf", r)
+config = open("settings.conf", "r")
 line = config.readline()
 print "Line Read: " % line
 line = config.readline()

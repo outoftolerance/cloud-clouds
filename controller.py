@@ -110,7 +110,7 @@ while (1):
 		updateLeds( leds, duty_cycles)
 
 		#wait for some time for the changes to take effect
-		time.sleep(0.1)
+		time.sleep(1)
 
 	#update the duty cycles from 100% to 0%
 	for i in range(100, 0, -1):
@@ -121,4 +121,4 @@ while (1):
 		updateLeds( leds, duty_cycles)
 
 		#wait for some time for the changes to take effect
-		time.sleep(0.1)
+		time.sleep(1)

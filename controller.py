@@ -12,7 +12,7 @@ pi = pigpio.pi()
 LED_FREQ = 120	#frequency of LED PWM switching
 LOCATION = "CAXX0518"	#location of the weather we want
 MODE = "lamp"	#mode we want to be in (default is mirror weather at location)
-DEFAULT_COLOR = [255, 0, 0]	#default colour shown in lamp mode
+DEFAULT_COLOR = [255, 255, 255]	#default colour shown in lamp mode
 
 #open the settings file and grab all our globals from there
 config = open("settings.conf", "r")
@@ -53,13 +53,13 @@ def updateLeds( leds, duty_cycles ):
 #function to define lamp mode
 def lampMode(duty_cycles, DEFAULT_COLOR):
 	"Outputs duty cycle values based on lamp mode and default colour"
-	for channel in range(0, 2, 1):
+	for channel in range(0, 6, 3):
 		for colour in range (0, 2, 1):
 			duty_cycles[channel + colour] = DEFAULT_COLOR[colour]
 	return
 
 #function for pulsing mode
-def pulseMode(duty_cycles):
+def pulseMode(duty_cycles, DEFAULT_COLOR):
 	#update the duty cycles from 0% to 100%
 	for i in range(0, 255, 1):
 		for j in range(len(duty_cycles)):

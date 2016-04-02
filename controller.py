@@ -12,7 +12,7 @@ GPIO.setwarnings(False)
 LED_FREQ = 120	#frequency of LED PWM switching
 LOCATION = "CAXX0518"	#location of the weather we want
 MODE = "lamp"	#mode we want to be in (default is mirror weather at location)
-DEFAULT_COLOR = [255, 255, 255]	#default colour shown in lamp mode
+DEFAULT_COLOR = [255, 0, 0]	#default colour shown in lamp mode
 
 #open the settings file and grab all our globals from there
 config = open("settings.conf", "r")
@@ -124,7 +124,7 @@ while (1):
 	if mode == "mirror":
 		print "\nGetting latest from weather mirror mode"
 		mirrorWeatherMode(duty_cycles)
-	else if mode == "invert":
+	elif mode == "invert":
 		print "\nGetting latest from weather invert mode"
 		invertWeatherMode(duty_cycles)
 	else:

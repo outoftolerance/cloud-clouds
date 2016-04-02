@@ -3,7 +3,7 @@
 import time
 import sys
 import RPi.GPIO as GPIO
-import CloudFunctions
+#import CloudFunctions
 
 #define global variables defaults
 LED_FREQ = 1000	#frequency of LED PWM switching

@@ -9,7 +9,7 @@ import RPi.GPIO as GPIO
 GPIO.setwarnings(False)
 
 #define global variables defaults
-LED_FREQ = 1000	#frequency of LED PWM switching
+LED_FREQ = 120	#frequency of LED PWM switching
 LOCATION = "CAXX0518"	#location of the weather we want
 MODE = "mirror"	#mode we want to be in (default is mirror weather at location)
 
@@ -104,7 +104,7 @@ while (1):
 	#update the duty cycles from 0% to 100%
 	for i in range(0, 100, 1):
 		for j in range(len(duty_cycles)):
-			duty_cycles[j] = i/100
+			duty_cycles[j] = i
 
 		#send new duty cyles to LEDs
 		updateLeds( leds, duty_cycles)
@@ -115,7 +115,7 @@ while (1):
 	#update the duty cycles from 100% to 0%
 	for i in range(100, 0, -1):
 		for j in range(len(duty_cycles)):
-			duty_cycles[j] = i/100
+			duty_cycles[j] = i
 			
 		#send new duty cyles to LEDs
 		updateLeds( leds, duty_cycles)

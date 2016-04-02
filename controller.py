@@ -53,8 +53,8 @@ def updateLeds( leds, duty_cycles ):
 #function to define lamp mode
 def lampMode(duty_cycles, DEFAULT_COLOR):
 	"Outputs duty cycle values based on lamp mode and default colour"
-	for channel in range(0, 6, 3):
-		for colour in range (0, 2, 1):
+	for channel in range(0, 9, 3):
+		for colour in range (0, 3, 1):
 			duty_cycles[channel + colour] = DEFAULT_COLOR[colour]
 			print "\nupdating pin"
 			print (channel+colour)

@@ -23,6 +23,8 @@ def GetMode ():
 
 	return
 
+	
+
 # Update weather data
 def RunWeatherStatus( location ):
 	weatherResult = pywapi.get_weather_from_weather_com(location, units = "metric" )

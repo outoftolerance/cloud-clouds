@@ -58,6 +58,25 @@ def lampMode(duty_cycles, DEFAULT_COLOR):
 			duty_cycles[channel + colour] = DEFAULT_COLOR[colour]
 	return
 
+#function for pulsing mode
+def pulseMode(duty_cycles):
+	#update the duty cycles from 0% to 100%
+	for i in range(0, 255, 1):
+		for j in range(len(duty_cycles)):
+			duty_cycles[j] = i
+
+		#wait for some time for the changes to take effect
+		time.sleep(0.01)
+
+	#update the duty cycles from 100% to 0%
+	for i in range(255, 0, -1):
+		for j in range(len(duty_cycles)):
+			duty_cycles[j] = i
+
+		#wait for some time for the changes to take effect
+		time.sleep(0.01)
+	return
+
 #function which runs the duty cycles for weather mode
 def weatherMirrorMode(duty_cycles):
 	"Outputs duty cycle values based on weather outside"
@@ -83,40 +102,21 @@ startLeds(leds, duty_cycles)
 #inifite, just updates the LED duty cycles from the duty_cycles array and drives them up and down
 while (1):
 	print "\nMain program loop started."
-#
-#	#check what mode we are in and run appropriate function
-#	if MODE == "mirror":
-#		print "\nGetting latest from weather mirror mode"
-#		mirrorWeatherMode(duty_cycles)
-#	elif MODE == "invert":
-#		print "\nGetting latest from weather invert mode"
-#		invertWeatherMode(duty_cycles)
-#	else:
-#		print "\nGetting latest from lamp mode"
-#		lampMode(duty_cycles, DEFAULT_COLOR)
-#
-#	#update the LED duty cycles
-#	print "\nUpdating LED duty cycles."
-#	updateLeds(leds, duty_cycles)
 
-	#update the duty cycles from 0% to 100%
-	for i in range(0, 255, 1):
-		for j in range(len(duty_cycles)):
-			duty_cycles[j] = i
+	#check what mode we are in and run appropriate function
+	if MODE == "mirror":
+		print "\nGetting latest from weather mirror mode"
+		mirrorWeatherMode(duty_cycles)
+	elif MODE == "invert":
+		print "\nGetting latest from weather invert mode"
+		invertWeatherMode(duty_cycles)
+	elif MODE == "pulse":
+		print "\nGetting latest from weather invert mode"
+		pulseMode(duty_cycles)
+	else:
+		print "\nGetting latest from lamp mode"
+		lampMode(duty_cycles, DEFAULT_COLOR)
 
-		#send new duty cyles to LEDs
-		updateLeds( leds, duty_cycles)
-
-		#wait for some time for the changes to take effect
-		time.sleep(0.01)
-
-	#update the duty cycles from 100% to 0%
-	for i in range(255, 0, -1):
-		for j in range(len(duty_cycles)):
-			duty_cycles[j] = i
-			
-		#send new duty cyles to LEDs
-		updateLeds( leds, duty_cycles)
-
-		#wait for some time for the changes to take effect
-		time.sleep(0.01)
+	#update the LED duty cycles
+	print "\nUpdating LED duty cycles."
+	updateLeds(leds, duty_cycles)

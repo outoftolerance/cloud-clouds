@@ -38,6 +38,7 @@ def stopLeds( leds ):
 	print "\nSwitching off all LEDs!"
 	for index in range(len(leds)):
 		pi.set_PWM_dutycycle(leds[index], 0)
+		pi.stop()
 	return
 
 #function to update the pin duty cylces
@@ -46,7 +47,6 @@ def updateLeds( leds, duty_cycles ):
 	print "\nUpdating LED duty cycles!"
 	for index in range(len(leds)):
 		pi.set_PWM_dutycycle(leds[index], duty_cycles[index])
-		pi.stop()
 	return
 
 #function to define lamp mode

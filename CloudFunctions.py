@@ -5,11 +5,22 @@
 import pywapi		#Weather API library
 import pygame		#Pythong library for sound, keyboard entries, etc...
 import time
-import datetime			# Structure defined as datetime(Year, Month, Day, Hour, Minute Second, Millisecond)
-
+import datetime		# Structure defined as datetime(Year, Month, Day, Hour, Minute Second, Millisecond)
+import pigpio		#Pi GPIO library
 
 # Variable definitions
 location = "CAXX0518"	# Vancouver-Canada
+
+def DefineGPIOPins():
+	redLED1 = 17
+	greenLED1 = 18
+	blueLED1 = 27
+	redLED2 = 23
+	greenLED2 = 24
+	blueLED2 = 25
+	redLED3 = 10
+	greenLED3 = 9
+	blueLED3 = 11
 
 
 # Get user input for mode
@@ -22,8 +33,6 @@ def GetMode ():
 	mode = raw_input("Select Mode Number: 1-Weather; 2-Lamp; 3-Party\n")
 
 	return
-
-	
 
 # Update weather data
 def RunWeatherStatus( location ):
@@ -54,6 +63,7 @@ def RunWeatherStatus( location ):
 
 	return
 
+def SetLEDColor(pin, brightness)
 
 
 

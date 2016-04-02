@@ -58,13 +58,13 @@ GPIO.setup(17, GPIO.OUT)	#LED Red 1
 GPIO.setup(18, GPIO.OUT)	#LED Green 1
 GPIO.setup(27, GPIO.OUT)	#LED Blue 1
 #LED Strip 2w
-GPIO.setup(4, GPIO.OUT)	#LED Red 2
-GPIO.setup(5, GPIO.OUT)	#LED Green 2
-GPIO.setup(6, GPIO.OUT)	#LED Blue 2
+GPIO.setup(23, GPIO.OUT)	#LED Red 2
+GPIO.setup(24, GPIO.OUT)	#LED Green 2
+GPIO.setup(25, GPIO.OUT)	#LED Blue 2
 #LED Strip 3
-GPIO.setup(12, GPIO.OUT)	#LED Red 3
-GPIO.setup(13, GPIO.OUT)	#LED Green 3
-GPIO.setup(14, GPIO.OUT)	#LED Blue 3
+GPIO.setup(10, GPIO.OUT)	#LED Red 3
+GPIO.setup(9, GPIO.OUT)	#LED Green 3
+GPIO.setup(11, GPIO.OUT)	#LED Blue 3
 
 #create an array to store all the led objects
 leds = []
@@ -76,18 +76,18 @@ leds.append(led)
 led = GPIO.PWM(27, LED_FREQ)
 leds.append(led)
 #LED strip 2
-led = GPIO.PWM(4, LED_FREQ)
+led = GPIO.PWM(23, LED_FREQ)
 leds.append(led)
-led = GPIO.PWM(5, LED_FREQ)
+led = GPIO.PWM(24, LED_FREQ)
 leds.append(led)
-led = GPIO.PWM(6, LED_FREQ)
+led = GPIO.PWM(25, LED_FREQ)
 leds.append(led)
 #LED strip 3
-led = GPIO.PWM(12, LED_FREQ)
+led = GPIO.PWM(10, LED_FREQ)
 leds.append(led)
-led = GPIO.PWM(13, LED_FREQ)
+led = GPIO.PWM(9, LED_FREQ)
 leds.append(led)
-led = GPIO.PWM(14, LED_FREQ)
+led = GPIO.PWM(11, LED_FREQ)
 leds.append(led)
 
 #create an array to store all the led pin duty cycles
@@ -110,7 +110,7 @@ while (1):
 		updateLeds( leds, duty_cycles)
 
 		#wait for some time for the changes to take effect
-		time.sleep(0.2)
+		time.sleep(1)
 
 	#update the duty cycles from 100% to 0%
 	for i in range(100, 0, -1):
@@ -121,4 +121,4 @@ while (1):
 		updateLeds( leds, duty_cycles)
 
 		#wait for some time for the changes to take effect
-		time.sleep(0.2)
+		time.sleep(1)

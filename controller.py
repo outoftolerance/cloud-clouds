@@ -54,9 +54,9 @@ print "\nCloud Clouds is starting..."
 print "\nSetting up GPIO pins and libraries..."
 GPIO.setmode(GPIO.BCM)
 #LED Strip 1
-GPIO.setup(0, GPIO.OUT)	#LED Red 1
-GPIO.setup(1, GPIO.OUT)	#LED Green 1
-GPIO.setup(2, GPIO.OUT)	#LED Blue 1
+GPIO.setup(17, GPIO.OUT)	#LED Red 1
+GPIO.setup(18, GPIO.OUT)	#LED Green 1
+GPIO.setup(27, GPIO.OUT)	#LED Blue 1
 #LED Strip 2w
 GPIO.setup(4, GPIO.OUT)	#LED Red 2
 GPIO.setup(5, GPIO.OUT)	#LED Green 2
@@ -66,15 +66,14 @@ GPIO.setup(12, GPIO.OUT)	#LED Red 3
 GPIO.setup(13, GPIO.OUT)	#LED Green 3
 GPIO.setup(14, GPIO.OUT)	#LED Blue 3
 
-
 #create an array to store all the led objects
 leds = []
 #LED Strip 1
-led = GPIO.PWM(0, LED_FREQ)
+led = GPIO.PWM(17, LED_FREQ)
 leds.append(led)
-led = GPIO.PWM(1, LED_FREQ)
+led = GPIO.PWM(18, LED_FREQ)
 leds.append(led)
-led = GPIO.PWM(2, LED_FREQ)
+led = GPIO.PWM(27, LED_FREQ)
 leds.append(led)
 #LED strip 2
 led = GPIO.PWM(4, LED_FREQ)
@@ -101,6 +100,7 @@ startLeds(leds, duty_cycles)
 #inifite, just updates the LED duty cycles from the duty_cycles array and drives them up and down
 while (1):
 	print "\nMain program loop started."
+
 	#update the duty cycles from 0% to 100%
 	for i in range(0, 100, 1):
 		for j in range(len(duty_cycles)):

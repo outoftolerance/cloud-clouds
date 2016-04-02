@@ -102,7 +102,7 @@ while (1):
 	print "\nMain program loop started."
 
 	#update the duty cycles from 0% to 100%
-	for i in range(0, LED_FREQ, 1):
+	for i in range(0, 100, 1):
 		for j in range(len(duty_cycles)):
 			duty_cycles[j] = i
 
@@ -113,7 +113,7 @@ while (1):
 		time.sleep(0.1)
 
 	#update the duty cycles from 100% to 0%
-	for i in range(LED_FREQ, 0, -1):
+	for i in range(100, 0, -1):
 		for j in range(len(duty_cycles)):
 			duty_cycles[j] = i
 			

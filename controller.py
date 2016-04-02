@@ -85,7 +85,7 @@ def weatherMirrorMode(duty_cycles):
 	return
 
 #function which runs the duty cycles for weather mode inverted
-def weatherMirrorMode(duty_cycles):
+def weatherInvertMode(duty_cycles):
 	"Outputs duty cycle values based on weather outside inverted"
 	return
 

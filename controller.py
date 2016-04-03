@@ -3,14 +3,14 @@
 import time
 import sys
 import pigpio
-#import CloudFunctions
+import string
 
 #setup a pi object
 pi = pigpio.pi()
 
 #define global variables defaults
-LED_FREQ = 120	#frequency of LED PWM switching
 LOCATION = "CAXX0518"	#location of the weather we want
+UNITS = "metric"	#default units for the weather
 MODE = "lamp"	#mode we want to be in (default is mirror weather at location)
 DEFAULT_COLOR = [255, 255, 255]	#default colour shown in lamp mode
 
@@ -22,6 +22,20 @@ line = config.readline()
 print "Line Read: %s" % (line)
 line = config.readline()
 print "Line Read: %s" % (line)
+
+with open("settings.conf", "r") as f:
+    for line in f:
+    	setting = string.split(line, "=")
+        if setting[0] == "location"
+        	LOCATION = setting[1]
+        elif setting[0] == "units"
+        	UNITS = setting[1]
+        elif setting[0] == "mode"
+        	MODE = setting[1]
+        elif setting[0] == "colour"
+        	DEFAULT_COLOR = string.split(setting[1], ",")
+        else
+        	print "\nSetting in config file not recognised %s" % line
 
 #define all the functions we need in the program
 #function to start all the pins with current duty cycle

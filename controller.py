@@ -37,6 +37,9 @@ with open("settings.conf", "r") as f:
         else:
         	print "\nSetting in config file not recognised %s" % line
 
+#close the file for other programs
+f.close()
+
 #define all the functions we need in the program
 #function to start all the pins with current duty cycle
 def startLeds( leds, duty_cycles ):

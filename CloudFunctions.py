@@ -2,121 +2,79 @@
 #################################################################
 
 # Import libraries
-import pywapi		# Weather API library
-import pygame		# Pythong library for sound, keyboard entries, etc...
+import pywapi				# Weather API library
+import pygame				# Pythong library for sound, keyboard entries, etc...
 import time
-import datetime		# Structure defined as datetime(Year, Month, Day, Hour, Minute Second, Millisecond)
-import pigpio		# Pi GPIO library
+import datetime				# Structure defined as datetime(Year, Month, Day, Hour, Minute Second, Millisecond)
+import pigpio				# Pi GPIO library
 import controller
 
+# Need to install - enter: pip install astral
+from astral import Astral 	# Class with functions for calculating sunrise-sunset times
+
 # Variable definitions
-location = "CAXX0518"	# Vancouver-Canada
-
-def DefineGPIOPins():
-	redLED1 = 17
-	greenLED1 = 18
-	blueLED1 = 27
-	redLED2 = 23
-	greenLED2 = 24
-	blueLED2 = 25
-	redLED3 = 10
-	greenLED3 = 9
-	blueLED3 = 11
+setLocation = "CAXX0518"		# Vancouver-Canada
+setCity = "Vancouver"
 
 
-# Get user input for mode
-def GetMode ():
-	#Different Modes
-	weatherMode = 1
-	lampMode = 2
-	partyMode = 3
-
-	mode = raw_input("Select Mode Number: 1-Weather; 2-Lamp; 3-Party\n")
-
-	return
-
-
+##### Weather Class #####
+# Input: Location, Units - default: metric
+#########################
 class CWeather:
 
-	def _init_(self, setLocation, setUnits = "metric"):
-		self.setLocation = setLocation
-		self.setUnits = setUnits
-		weatherData = pywapi.get_weather_from_weather_com(self.setLocation, units = self.setUnits )
+	def _init_(self, setCity, setLocation, setUnits = "metric"):
+		self.location = setLocation
+		self.units = setUnits
+		self.city = setCity
+		weatherData = pywapi.get_weather_from_weather_com(self.location, units = self.units )
+		astrology = Astral()
+		sunLocation = astrology[self.city]
 
 	def getCondition(self):
 		conditionStatus = weatherData["current_conditions"]["text"]
 
+		# 7 Catagories - returns a string: Cloud, Sun, Rain, Snow, Storm, Fog... default: Clear
 		if conditionStatus == ("Cloudy" or "Partly Cloudy" or "Mostly Cloudy" or "Overcast"):
-			print("Cloud")
-			return statusCloud
+			return "Cloud"
 		elif conditionStatus == ("Sunny" or "Partly Sunny" or "Mostly Sunny"):
-			#LED setting for Sunny
-			print("Sun")
-			return statusSun
+			return "Sun"
 		elif conditionStatus == ("Rain" or "Showers" or "Chance of Rain" or "Light Rain" or "Scattered Showers" or "Freezing Drizzle" or "Drizzle"):
-			#LED setting for Rain
-			print("Rain")
-			return statusRain
+			return "Rain"
 		elif conditionStatus == ("Rain and Snow" or "Snow" or "Chance of Snow" or "Sleet" or "Icy" or "Snow Showers" or "Hail" or "Light Snow"):
-			#LED setting for Snow
-			print("Snow")
-			return statusSnow
+			return "Snow"
 		elif conditionStatus == ("Storm" or "Thunderstorm" or "Chance of Thunderstorm" or "Chance of Storm" or "Scattered Thunderstorms"):
-			#LED setting for Storm
-			print("Storm")
-			return statusStorm
+			return "Storm"
 		elif weatherStatus == ("Fog" or "Smoke" or "Dust" or "Haze" or "Mist"):
-			#LED setting for Fog
-			print("Fog")
-			return statusFog
+			return "Fog"
 		else:
-			#LED setting for Clear - the default daytime setting
-			print("Clear")
-			return statusClear
+			#the default daytime setting
+			return "Clear"
 
 	def getTemperature(self):
 		temperatureStatus = weatherData["current_conditions"]["temperature"]
-		return float(temperatureStatus)
+		return float(temperatureStatus)		#Returns a float value - units: Celcius
 
 	def getSunRiseTime(self):
-		sunriseStatus = weatherData["current_conditions"]["temperature"]
+		sunriseStatus = sunLocation.sun(date = datetime.date.today(), local = True)
+		strSunrise = str(sunriseStatus["sunrise"])
+		sunriseTime = strSunrise[11] + strSunrise[12] + strSunrise[13] + strSunrise[14] + strSunrise[15] + strSunrise[16] + strSunrise[17] + strSunrise[18]
+		return sunriseTime 			#Returns a string - format: [HH:MM:SS] 24h clock
+
 
 	def getSunSetTime(self):
-
+		sunsetStatus = sunLocation.sun(date = datetime.date.today(), local = True)
+		strSunset = str(sunsetStatus["sunset"])
+		sunsetTime = strSunset[11] + strSunset[12] + strSunset[13] + strSunset[14] + strSunset[15] + strSunset[16] + strSunset[17] + strSunset[18]
+		return sunsetTime 			#Returns a string - format: [HH:MM:SS] 24h clock
 
 	def getWindSpeed(self):
-		#write something here
+		windSpeedStatus = weatherData["current_conditions"]["wind"]["speed"]
+		return float(windSpeedStatus)		#Returns a float value - units: km/h
 
+	def getVisibility(self):
+		visibilityStatus =  weatherData["current_conditions"]["visibility"]
+		return float(visibilityStatus)		#Returns float value - units: km
+		
 
-
-
-# Update weather data
-def RunWeatherStatus( location ):
-	weatherResult = pywapi.get_weather_from_weather_com(location, units = "metric" )
-	weatherStatus = weatherResult["current_conditions"]["text"]
-
-	if weatherStatus == ("Cloudy" or "Partly Cloudy" or "Mostly Cloudy" or "Overcast"):
-		#LED setting for Cloudy
-		print("Cloud")
-	elif weatherStatus == ("Sunny" or "Partly Sunny" or "Mostly Sunny"):
-		#LED setting for Sunny
-		print("Sun")
-	elif weatherStatus == ("Rain" or "Showers" or "Chance of Rain" or "Light Rain" or "Scattered Showers" or "Freezing Drizzle" or "Drizzle"):
-		#LED setting for Rain
-		print("Rain")
-	elif weatherStatus == ("Rain and Snow" or "Snow" or "Chance of Snow" or "Sleet" or "Icy" or "Snow Showers" or "Hail" or "Light Snow"):
-		#LED setting for Snow
-		print("Snow")
-	elif weatherStatus == ("Storm" or "Thunderstorm" or "Chance of Thunderstorm" or "Chance of Storm" or "Scattered Thunderstorms"):
-		#LED setting for Storm
-		print("Storm")
-	elif weatherStatus == ("Fog" or "Smoke" or "Dust" or "Haze" or "Mist"):
-		#LED setting for Fog
-		print("Fog")
-	else:
-		#LED setting for Clear - the default daytime setting
-		print("Clear")
-
-	return
 
 

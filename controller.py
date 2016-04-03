@@ -26,15 +26,15 @@ print "Line Read: %s" % (line)
 with open("settings.conf", "r") as f:
     for line in f:
     	setting = string.split(line, "=")
-        if setting[0] == "location"
+        if setting[0] == "location":
         	LOCATION = setting[1]
-        elif setting[0] == "units"
+        elif setting[0] == "units":
         	UNITS = setting[1]
-        elif setting[0] == "mode"
+        elif setting[0] == "mode":
         	MODE = setting[1]
-        elif setting[0] == "colour"
+        elif setting[0] == "colour":
         	DEFAULT_COLOR = string.split(setting[1], ",")
-        else
+        else:
         	print "\nSetting in config file not recognised %s" % line
 
 #define all the functions we need in the program

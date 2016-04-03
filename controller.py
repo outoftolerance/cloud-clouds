@@ -4,6 +4,7 @@ import time
 import sys
 import pigpio
 import string
+#import CloudFunctions
 
 #setup a pi object
 pi = pigpio.pi()
@@ -13,6 +14,13 @@ LOCATION = "CAXX0518"	#location of the weather we want
 UNITS = "metric"	#default units for the weather
 MODE = "lamp"	#mode we want to be in (default is mirror weather at location)
 DEFAULT_COLOR = [255, 255, 255]	#default colour shown in lamp mode
+WEATHER = ["Clear",26,0700,1900,15]	#default weather, clear, 26 degrees, sunrise 7am, 7pm sunset, 15km/h winds
+
+#setup a location object for weather
+#location = CWeather(LOCATION, UNITS)
+
+#get the latest weather from location
+#WEATHER = location.getStatus()
 
 #open the settings file and grab all our globals from there
 config = open("settings.conf", "r")
@@ -95,12 +103,20 @@ def pulseMode(duty_cycles, DEFAULT_COLOR):
 	return
 
 #function which runs the duty cycles for weather mode
-def weatherMirrorMode(duty_cycles):
+def weatherMirrorMode(duty_cycles, WEATHER):
 	"Outputs duty cycle values based on weather outside"
+	#get the latest weather from the weather object
+	#WEATHER = weather.getStatus()
+
+	#set the LED colour based on conditions
+
+
+	#set the sound based on conditions
+
 	return
 
 #function which runs the duty cycles for weather mode inverted
-def weatherInvertMode(duty_cycles):
+def weatherInvertMode(duty_cycles, WEATHER):
 	"Outputs duty cycle values based on weather outside inverted"
 	return
 
@@ -123,10 +139,10 @@ while (1):
 	#check what mode we are in and run appropriate function
 	if MODE == "mirror":
 		print "\nGetting latest from weather mirror mode"
-		mirrorWeatherMode(duty_cycles)
+		mirrorWeatherMode(duty_cycles, WEATHER)
 	elif MODE == "invert":
 		print "\nGetting latest from weather invert mode"
-		invertWeatherMode(duty_cycles)
+		invertWeatherMode(duty_cycles, WEATHER)
 	elif MODE == "pulse":
 		print "\nGetting latest from weather invert mode"
 		pulseMode(duty_cycles)

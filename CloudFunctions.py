@@ -7,7 +7,10 @@ import pygame				# Pythong library for sound, keyboard entries, etc...
 import time
 import datetime				# Structure defined as datetime(Year, Month, Day, Hour, Minute Second, Millisecond)
 import pigpio				# Pi GPIO library
+
+#### Remove this once all functions have been transfered to this file
 import controller
+####
 
 # Need to install - enter: pip install astral
 from astral import Astral 	# Class with functions for calculating sunrise-sunset times

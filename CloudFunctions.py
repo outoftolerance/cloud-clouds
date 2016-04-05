@@ -14,15 +14,17 @@ import controller
 
 # Need to install - enter: pip install astral
 from astral import Astral 	# Class with functions for calculating sunrise-sunset times
+# Need to install - enter: pip install pygame
+from pygame import mixer
 
 # Variable definitions
 setLocation = "CAXX0518"		# Vancouver-Canada
 setCity = "Vancouver"
 
 
-##### Weather Class #####
-# Input: Location, Units - default: metric
-#########################
+############################# Weather Class ##################################################
+# Input: String - "City", String - "LOCATION", String - units (default metric)
+##############################################################################################	
 class CWeather:
 
 	def _init_(self, setCity, setLocation, setUnits = "metric"):
@@ -77,7 +79,55 @@ class CWeather:
 	def getVisibility(self):
 		visibilityStatus =  weatherData["current_conditions"]["visibility"]
 		return float(visibilityStatus)		#Returns float value - units: km
-		
+##############################################################################################		
 
 
+######################################## Play Sound Function #########################################
+# Input: String - "night1", "night2", "day1", "day2", "sunrise", "sunset", "rain1", "rain2", "thunder1", 
+#                 "thunder2", "thunder3", "snow", "wind", "people", "street", "waves", "stream" 
+# Plays sound until track ends
+# Note: Ensure file location is set to - /home/pi/Documents/cloud-clouds/Sounds/
+def PlaySound(noise):
+	mixer.init()
 
+	if noise == "night1":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Cricket1.mp3")
+	elif noise == "night2":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Cricket2.wav")
+	elif noise == "day1":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Birds1.mp3")
+	elif noise == "day2":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Birds2.wav")
+	elif noise == "sunrise":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Rooster.mp3")
+	elif noise == "sunset":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Owl.wav")
+	elif noise == "rain1":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Rain1.mp3")
+	elif noise == "rain2":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Rain2.wav")
+	elif noise == "thunder1":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Thunder.mp3")
+	elif noise == "thunder2":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/RainThunder.mp3")
+	elif noise == "thunder3":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/WindThunder.wav")
+	elif noise == "snow":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/SnowBells.mp3")
+	elif noise == "wind":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Wind.mp3")
+	elif noise == "people":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/People.wav")
+	elif noise == "street":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Street.wav")
+	elif noise == "waves":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Waves.wav")
+	elif noise == "stream":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Stream.wav")
+	else
+		print("ERROR")
+
+	mixer.music.play()
+	while mixer.music.get_busy() == True:
+		continue
+#####################################################################################################

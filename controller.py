@@ -161,3 +161,5 @@ while (1):
 	#update the LED duty cycles
 	print "\nUpdating LED duty cycles."
 	updateLeds(leds, duty_cycles)
+
+	time.sleep(0.1)

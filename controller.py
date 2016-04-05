@@ -13,8 +13,10 @@ pi = pigpio.pi()
 LOCATION = "CAXX0518"	#location of the weather we want
 UNITS = "metric"	#default units for the weather
 MODE = "lamp"	#mode we want to be in (default is mirror weather at location)
-DEFAULT_COLOR = [255, 255, 255]	#default colour shown in lamp mode
+DEFAULT_COLOR = [255, 255, 255]	#default colour shown in lamp and pulse mode
 WEATHER = ["Clear",26,0700,1900,15]	#default weather, clear, 26 degrees, sunrise 7am, 7pm sunset, 15km/h winds
+COUNT = 0
+DIRECTION = 1
 
 #setup a location object for weather
 #location = CWeather(LOCATION, UNITS)
@@ -84,39 +86,44 @@ def lampMode(duty_cycles, DEFAULT_COLOR):
 	return
 
 #function for pulsing mode
-def pulseMode(duty_cycles, DEFAULT_COLOR):
-	#update the duty cycles from 0% to 100%
-	for i in range(0, 255, 1):
-		for j in range(len(duty_cycles)):
-			duty_cycles[j] = i
+def pulseMode(cycle, previous_duty_cycles, duty_cycles, DEFAULT_COLOR):
+	"Pulses a given colour"
+	for channel in range(0, 9, 3):
+		for colour in range (0, 3, 1):
+			duty_cycles[channel + colour] = (cycle[COUNT] / 100) * DEFAULT_COLOR[colour]
 
-		#wait for some time for the changes to take effect
-		time.sleep(0.01)
+	#check the limits and swap dir if needed
+	if cycle[COUNT] >= 100 || cycle[COUNT] <= 0:
+		if cycle[DIRECTION] == 1:
+			cycle[DIRECTION] = 0
+		else:
+			cycle[DIRECTION] = 1
 
-	#update the duty cycles from 100% to 0%
-	for i in range(255, 0, -1):
-		for j in range(len(duty_cycles)):
-			duty_cycles[j] = i
+	#increment/decrement the counter based on direction
+	if cycle[DIRECTION] == 1
+		cycle[COUNT] = cycle[COUNT] + 1
+	else:
+		cycle[COUNT] = cycle[COUNT] - 1
 
-		#wait for some time for the changes to take effect
-		time.sleep(0.01)
-	return
+
 
 #function which runs the duty cycles for weather mode
-def weatherMirrorMode(duty_cycles, WEATHER):
+def weatherMirrorMode(cycle, previous_duty_cycles, duty_cycles, WEATHER):
 	"Outputs duty cycle values based on weather outside"
 	#get the latest weather from the weather object
 	#WEATHER = weather.getStatus()
 
 	#set the LED colour based on conditions
-
+		#check if it's sunrise
+		#check if it's sunset
+		
 
 	#set the sound based on conditions
 
 	return
 
 #function which runs the duty cycles for weather mode inverted
-def weatherInvertMode(duty_cycles, WEATHER):
+def weatherInvertMode(cycle, previous_duty_cycles, duty_cycles, WEATHER):
 	"Outputs duty cycle values based on weather outside inverted"
 	return
 
@@ -127,6 +134,8 @@ print "\nCloud Clouds is starting..."
 print "\nSetting up GPIO pins and libraries..."
 leds = [17, 18, 27, 23, 24, 25, 10, 9, 11]
 duty_cycles = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+previous_duty_cycles = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+cycle = [0, 1];
 
 #start all the leds
 startLeds(leds, duty_cycles)
@@ -139,13 +148,13 @@ while (1):
 	#check what mode we are in and run appropriate function
 	if MODE == "mirror":
 		print "\nGetting latest from weather mirror mode"
-		mirrorWeatherMode(duty_cycles, WEATHER)
+		mirrorWeatherMode(cycle, previous_duty_cycles, duty_cycles, WEATHER)
 	elif MODE == "invert":
 		print "\nGetting latest from weather invert mode"
-		invertWeatherMode(duty_cycles, WEATHER)
+		invertWeatherMode(cycle, previous_duty_cycles, duty_cycles, WEATHER)
 	elif MODE == "pulse":
 		print "\nGetting latest from weather invert mode"
-		pulseMode(duty_cycles)
+		pulseMode(cycle, previous_duty_cycles, duty_cycles)
 	else:
 		print "\nGetting latest from lamp mode"
 		lampMode(duty_cycles, DEFAULT_COLOR)

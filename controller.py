@@ -13,7 +13,7 @@ pi = pigpio.pi()
 LOCATION = "CAXX0518"	#location of the weather we want
 UNITS = "metric"	#default units for the weather
 MODE = "pulse"	#mode we want to be in (default is mirror weather at location)
-DEFAULT_COLOR = [255, 255, 255]	#default colour shown in lamp and pulse mode
+DEFAULT_COLOUR = [255, 255, 255]	#default colour shown in lamp and pulse mode
 WEATHER = ["Clear",26,0700,1900,15]	#default weather, clear, 26 degrees, sunrise 7am, 7pm sunset, 15km/h winds
 COUNT = 0
 DIRECTION = 1
@@ -25,14 +25,6 @@ DIRECTION = 1
 #WEATHER = location.getStatus()
 
 #open the settings file and grab all our globals from there
-config = open("settings.conf", "r")
-line = config.readline()
-print "Line Read: %s" % (line)
-line = config.readline()
-print "Line Read: %s" % (line)
-line = config.readline()
-print "Line Read: %s" % (line)
-
 with open("settings.conf", "r") as f:
     for line in f:
     	setting = string.split(line, "=")
@@ -43,7 +35,7 @@ with open("settings.conf", "r") as f:
         elif setting[0] == "mode":
         	MODE = setting[1]
         elif setting[0] == "colour":
-        	DEFAULT_COLOR = string.split(setting[1], ",")
+        	DEFAULT_COLOUR = string.split(setting[1], ",")
         else:
         	print "\nSetting in config file not recognised %s" % line
 
@@ -78,22 +70,30 @@ def updateLeds( leds, duty_cycles ):
 	return
 
 #function to define lamp mode
-def lampMode(duty_cycles, DEFAULT_COLOR):
+def lampMode(duty_cycles, DEFAULT_COLOUR):
 	"Outputs duty cycle values based on lamp mode and default colour"
 	for channel in range(0, 9, 3):
 		for colour in range (0, 3, 1):
-			duty_cycles[channel + colour] = DEFAULT_COLOR[colour]
+			duty_cycles[channel + colour] = DEFAULT_COLOUR[colour]
 	return
 
 #function for pulsing mode
-def pulseMode(cycle, duty_cycles, DEFAULT_COLOR):
+def pulseMode(cycle, duty_cycles, DEFAULT_COLOUR):
 	"Pulses a given colour"
 	for channel in range(0, 9, 3):
 		for colour in range (0, 3, 1):
-			duty_cycles[channel + colour] = (cycle[COUNT] / 100) * DEFAULT_COLOR[colour]
+			duty_cycles[channel + colour] = int((float(cycle[COUNT])/100.0) * float(int(DEFAULT_COLOUR[colour])))
+			print duty_cycles[channel + colour]
 
 	#check the limits and swap dir if needed
-	if cycle[COUNT] >= 100 or cycle[COUNT] <= 0:
+	if cycle[COUNT] >= 100:
+		cycle[COUNT] = 100
+		if cycle[DIRECTION] == 1:
+			cycle[DIRECTION] = 0
+		else:
+			cycle[DIRECTION] = 1
+	elif cycle[COUNT] <= 0:
+		cycle[COUNT] = 0
 		if cycle[DIRECTION] == 1:
 			cycle[DIRECTION] = 0
 		else:
@@ -134,7 +134,7 @@ print "\nCloud Clouds is starting..."
 print "\nSetting up GPIO pins and libraries..."
 leds = [17, 18, 27, 23, 24, 25, 10, 9, 11]
 duty_cycles = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-cycle = [0, 1];
+cycle = [1, 1];
 
 #start all the leds
 startLeds(leds, duty_cycles)
@@ -143,6 +143,7 @@ startLeds(leds, duty_cycles)
 #inifite, just updates the LED duty cycles from the duty_cycles array and drives them up and down
 while (1):
 	print "\nMain program loop started."
+	print MODE
 
 	#check what mode we are in and run appropriate function
 	if MODE == "mirror":
@@ -153,13 +154,13 @@ while (1):
 		invertWeatherMode(cycle, duty_cycles, WEATHER)
 	elif MODE == "pulse":
 		print "\nGetting latest from weather invert mode"
-		pulseMode(cycle, duty_cycles)
+		pulseMode(cycle, duty_cycles, DEFAULT_COLOUR)
 	else:
 		print "\nGetting latest from lamp mode"
-		lampMode(duty_cycles, DEFAULT_COLOR)
+		pulseMode(cycle, duty_cycles, DEFAULT_COLOUR)
 
 	#update the LED duty cycles
 	print "\nUpdating LED duty cycles."
 	updateLeds(leds, duty_cycles)
 
-	time.sleep(0.1)
+	time.sleep(0.01)

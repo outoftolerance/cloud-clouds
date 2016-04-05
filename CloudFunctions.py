@@ -83,9 +83,8 @@ class CWeather:
 
 
 ######################################## Play Sound Function #########################################
-# Input: String - "night1", "night2", "day1", "day2", "sunrise", "sunset", "rain1", "rain2", "thunder1", 
-#                 "thunder2", "thunder3", "snow", "wind", "people", "street", "waves", "stream" 
-# Plays sound until track ends
+# Input:  String - noise type
+# Output: Plays sound until track ends
 # Note: Ensure file location is set to - /home/pi/Documents/cloud-clouds/Sounds/
 def PlaySound(noise):
 	mixer.init()
@@ -94,10 +93,18 @@ def PlaySound(noise):
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Cricket1.mp3")
 	elif noise == "night2":
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Cricket2.wav")
+	elif noise == "night2":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Cricket3.mp3")
 	elif noise == "day1":
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Birds1.mp3")
 	elif noise == "day2":
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Birds2.wav")
+	elif noise == "day3":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Birds3.mp3")
+	elif noise == "day4":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Birds4.mp3")
+	elif noise == "day5":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Birds5.wav")
 	elif noise == "sunrise":
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Rooster.mp3")
 	elif noise == "sunset":
@@ -106,23 +113,41 @@ def PlaySound(noise):
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Rain1.mp3")
 	elif noise == "rain2":
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Rain2.wav")
+	elif noise == "rain3":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Rain3.mp3")
+	elif noise == "rain4":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Rain4.mp3")
+	elif noise == "rain5":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Rain5.mp3")
 	elif noise == "thunder1":
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Thunder.mp3")
 	elif noise == "thunder2":
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/RainThunder.mp3")
 	elif noise == "thunder3":
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/WindThunder.wav")
-	elif noise == "snow":
+	elif noise == "snow1":
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/SnowBells.mp3")
-	elif noise == "wind":
-		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Wind.mp3")
-	elif noise == "people":
+	elif noise == "snow2":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Snow.mp3")
+	elif noise == "wind1":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Wind1.mp3")
+	elif noise == "wind2":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Wind2.mp3")
+	elif noise == "wind3":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Wind3.mp3")
+	elif noise == "clear1":
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/People.wav")
-	elif noise == "street":
+	elif noise == "clear2":
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Street.wav")
-	elif noise == "waves":
+	elif noise == "clear3":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Dogs1.mp3")
+	elif noise == "clear4":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Dogs2.mp3")
+	elif noise == "clear5":
+		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Kids.mp3")
+	elif noise == "sun1":
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Waves.wav")
-	elif noise == "stream":
+	elif noise == "sun2":
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Stream.wav")
 	else
 		print("ERROR")
@@ -130,4 +155,57 @@ def PlaySound(noise):
 	mixer.music.play()
 	while mixer.music.get_busy() == True:
 		continue
+#####################################################################################################
+
+
+############################### Play Weather Track Function #########################################
+# Input: String - 	conditionStatus: Cloud, Rain, Snow, Storm, Fog, Clear
+#					dayStatus: Sunrise, Sunset
+#					nightStuats: Night
+#					Default: Waves and Stream
+# Output: Plays Sound Tracks
+def PlayWeatherStatusTrack(status):
+	if status == "Cloud":
+		# Enter
+	elif status == "Sun":
+		PlaySound("day1")
+		PlaySound("day2")
+		PlaySound("day3")
+		PlaySound("day4")
+		PlaySound("day5")
+	elif status == "Rain":
+		PlaySound("rain1")
+		PlaySound("rain2")
+		PlaySound("rain3")
+		PlaySound("rain4")
+		PlaySound("rain5")
+	elif status == "Snow":
+		PlaySound("snow1")
+		PlaySound("snow2")
+	elif status == "Storm":
+		PlaySound("thunder1")
+		PlaySound("thunder2")
+		PlaySound("thunder3")
+	elif status == "Fog":
+		PlaySound("wind1")
+		PlaySound("wind2")
+		PlaySound("wind3")
+	elif status == "Clear":
+		PlaySound("clear1")
+		PlaySound("clear2")
+		PlaySound("clear3")
+		PlaySound("clear4")
+		PlaySound("clear5")
+	elif status == "Sunrise":
+		PlaySound("sunrise")
+	elif status == "Sunset":
+		PlaySound("sunset")
+	elif status == "Night":
+		PlaySound("night1")
+		PlaySound("night2")
+		PlaySound("night3")	
+	else:
+		PlaySound("sun1")
+		PlaySound("sun2")
+
 #####################################################################################################

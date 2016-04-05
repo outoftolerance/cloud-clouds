@@ -100,7 +100,7 @@ def pulseMode(cycle, previous_duty_cycles, duty_cycles, DEFAULT_COLOR):
 			cycle[DIRECTION] = 1
 
 	#increment/decrement the counter based on direction
-	if cycle[DIRECTION] == 1
+	if cycle[DIRECTION] == 1:
 		cycle[COUNT] = cycle[COUNT] + 1
 	else:
 		cycle[COUNT] = cycle[COUNT] - 1

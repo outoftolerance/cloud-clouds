@@ -12,7 +12,7 @@ pi = pigpio.pi()
 #define global variables defaults
 LOCATION = "CAXX0518"	#location of the weather we want
 UNITS = "metric"	#default units for the weather
-MODE = "lamp"	#mode we want to be in (default is mirror weather at location)
+MODE = "pulse"	#mode we want to be in (default is mirror weather at location)
 DEFAULT_COLOR = [255, 255, 255]	#default colour shown in lamp and pulse mode
 WEATHER = ["Clear",26,0700,1900,15]	#default weather, clear, 26 degrees, sunrise 7am, 7pm sunset, 15km/h winds
 COUNT = 0
@@ -86,7 +86,7 @@ def lampMode(duty_cycles, DEFAULT_COLOR):
 	return
 
 #function for pulsing mode
-def pulseMode(cycle, previous_duty_cycles, duty_cycles, DEFAULT_COLOR):
+def pulseMode(cycle, duty_cycles, DEFAULT_COLOR):
 	"Pulses a given colour"
 	for channel in range(0, 9, 3):
 		for colour in range (0, 3, 1):
@@ -108,7 +108,7 @@ def pulseMode(cycle, previous_duty_cycles, duty_cycles, DEFAULT_COLOR):
 
 
 #function which runs the duty cycles for weather mode
-def weatherMirrorMode(cycle, previous_duty_cycles, duty_cycles, WEATHER):
+def weatherMirrorMode(cycle, duty_cycles, WEATHER):
 	"Outputs duty cycle values based on weather outside"
 	#get the latest weather from the weather object
 	#WEATHER = weather.getStatus()
@@ -123,7 +123,7 @@ def weatherMirrorMode(cycle, previous_duty_cycles, duty_cycles, WEATHER):
 	return
 
 #function which runs the duty cycles for weather mode inverted
-def weatherInvertMode(cycle, previous_duty_cycles, duty_cycles, WEATHER):
+def weatherInvertMode(cycle, duty_cycles, WEATHER):
 	"Outputs duty cycle values based on weather outside inverted"
 	return
 
@@ -134,7 +134,6 @@ print "\nCloud Clouds is starting..."
 print "\nSetting up GPIO pins and libraries..."
 leds = [17, 18, 27, 23, 24, 25, 10, 9, 11]
 duty_cycles = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-previous_duty_cycles = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 cycle = [0, 1];
 
 #start all the leds
@@ -148,13 +147,13 @@ while (1):
 	#check what mode we are in and run appropriate function
 	if MODE == "mirror":
 		print "\nGetting latest from weather mirror mode"
-		mirrorWeatherMode(cycle, previous_duty_cycles, duty_cycles, WEATHER)
+		mirrorWeatherMode(cycle, duty_cycles, WEATHER)
 	elif MODE == "invert":
 		print "\nGetting latest from weather invert mode"
-		invertWeatherMode(cycle, previous_duty_cycles, duty_cycles, WEATHER)
+		invertWeatherMode(cycle, duty_cycles, WEATHER)
 	elif MODE == "pulse":
 		print "\nGetting latest from weather invert mode"
-		pulseMode(cycle, previous_duty_cycles, duty_cycles)
+		pulseMode(cycle, duty_cycles)
 	else:
 		print "\nGetting latest from lamp mode"
 		lampMode(duty_cycles, DEFAULT_COLOR)

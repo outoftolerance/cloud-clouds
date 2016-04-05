@@ -93,7 +93,7 @@ def pulseMode(cycle, previous_duty_cycles, duty_cycles, DEFAULT_COLOR):
 			duty_cycles[channel + colour] = (cycle[COUNT] / 100) * DEFAULT_COLOR[colour]
 
 	#check the limits and swap dir if needed
-	if cycle[COUNT] >= 100 || cycle[COUNT] <= 0:
+	if cycle[COUNT] >= 100 or cycle[COUNT] <= 0:
 		if cycle[DIRECTION] == 1:
 			cycle[DIRECTION] = 0
 		else:

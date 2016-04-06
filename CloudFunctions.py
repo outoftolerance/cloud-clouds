@@ -153,8 +153,6 @@ def PlaySound(noise):
 		print("ERROR")
 
 	mixer.music.play()
-	while mixer.music.get_busy() == True:
-		continue
 #####################################################################################################
 
 
@@ -164,48 +162,127 @@ def PlaySound(noise):
 #					nightStuats: Night
 #					Default: Waves and Stream
 # Output: Plays Sound Tracks
+
+# Add to global variables:
+count = 0
+setStatus = "Clear" 
+
 def PlayWeatherStatusTrack(status):
-	if status == "Cloud":
-		# Enter
-	elif status == "Sun":
-		PlaySound("day1")
-		PlaySound("day2")
-		PlaySound("day3")
-		PlaySound("day4")
-		PlaySound("day5")
-	elif status == "Rain":
-		PlaySound("rain1")
-		PlaySound("rain2")
-		PlaySound("rain3")
-		PlaySound("rain4")
-		PlaySound("rain5")
-	elif status == "Snow":
-		PlaySound("snow1")
-		PlaySound("snow2")
-	elif status == "Storm":
-		PlaySound("thunder1")
-		PlaySound("thunder2")
-		PlaySound("thunder3")
-	elif status == "Fog":
-		PlaySound("wind1")
-		PlaySound("wind2")
-		PlaySound("wind3")
-	elif status == "Clear":
-		PlaySound("clear1")
-		PlaySound("clear2")
-		PlaySound("clear3")
-		PlaySound("clear4")
-		PlaySound("clear5")
-	elif status == "Sunrise":
-		PlaySound("sunrise")
-	elif status == "Sunset":
-		PlaySound("sunset")
-	elif status == "Night":
-		PlaySound("night1")
-		PlaySound("night2")
-		PlaySound("night3")	
+	if setStatus != status:
+		mixer.music.stop()
 	else:
-		PlaySound("sun1")
-		PlaySound("sun2")
+		continue
+	if (mixer.music.get_busy() == False):
+		if status == ("Cloud" or "Fog"):
+			setStatus = status
+			if count == 0:
+				PlaySound("wind1")
+			if count == 1:
+				PlaySound("wind2")
+			if count == 2:
+				PlaySound("wind3")
+			if count >= 2:
+				count = 0
+			else:
+				count += 1
+		elif status == "Sun":
+			setStatus = status
+			if count == 0:
+				PlaySound("day1")
+			if count == 1:
+				PlaySound("day2")
+			if count == 2:
+				PlaySound("day3")
+			if count == 3:
+				PlaySound("day4")
+			if count == 4:
+				PlaySound("day5")
+			if count >= 4:
+				count = 0
+			else:
+				count += 1
+		elif status == "Rain":
+			setStatus = status
+			if count == 0:
+				PlaySound("rain1")
+			if count == 1:
+				PlaySound("rain2")
+			if count == 2:
+				PlaySound("rain3")
+			if count == 3:
+				PlaySound("rain4")
+			if count == 4:
+				PlaySound("rain5")
+			if count >= 4:
+				count = 0
+			else:
+				count += 1
+		elif status == "Snow":
+			setStatus = status
+			if count == 0:
+				PlaySound("snow1")
+			if count == 1:
+				PlaySound("snow2")
+			if count >= 1:
+				count = 0
+			else:
+				count += 1
+		elif status == "Storm":
+			setStatus = status
+			if count == 0:
+				PlaySound("thunder1")
+			if count == 1:
+				PlaySound("thunder2")
+			if count == 2:
+				PlaySound("thunder3")
+			if count >= 2:
+				count = 0
+			else
+				count += 1
+		elif status == "Clear":
+			setStatus = status
+			if count == 0:
+				PlaySound("clear1")
+			if count == 1:
+				PlaySound("clear2")
+			if count == 2:
+				PlaySound("clear3")
+			if count == 3:
+				PlaySound("clear4")
+			if count == 4:
+				PlaySound("clear5")
+			if count >= 4:
+				count = 0
+			else
+				count += 1
+		elif status == "Sunrise":
+			setStatus = status
+			PlaySound("sunrise")
+		elif status == "Sunset":
+			setStatus = status
+			PlaySound("sunset")
+		elif status == "Night":
+			setStatus = status
+			if count == 0:
+				PlaySound("night1")
+			if count == 1:
+				PlaySound("night2")
+			if count == 2:
+				PlaySound("night3")	
+			if count >= 2:
+				count = 0
+			else:
+				count += 1
+		else:
+			if count == 0:
+				PlaySound("sun1")
+			if count == 1:
+				PlaySound("sun2")
+			if count >= 1:
+				count = 0
+			else:
+				count += 1
+	else:
+		continue
 
 #####################################################################################################

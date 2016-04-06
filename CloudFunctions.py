@@ -62,15 +62,15 @@ class CWeather:
 	def getSunRiseTime(self):
 		sunriseStatus = sunLocation.sun(date = datetime.date.today(), local = True)
 		strSunrise = str(sunriseStatus["sunrise"])
-		sunriseTime = strSunrise[11] + strSunrise[12] + strSunrise[13] + strSunrise[14] + strSunrise[15] + strSunrise[16] + strSunrise[17] + strSunrise[18]
-		return sunriseTime 			#Returns a string - format: [HH:MM:SS] 24h clock
+		sunriseTime = strSunrise[11] + strSunrise[12] + strSunrise[14] + strSunrise[15] + strSunrise[17] + strSunrise[18]
+		return int(sunriseTime) 			#Returns a int - format: [HHMMSS] 24h clock
 
 
 	def getSunSetTime(self):
 		sunsetStatus = sunLocation.sun(date = datetime.date.today(), local = True)
 		strSunset = str(sunsetStatus["sunset"])
-		sunsetTime = strSunset[11] + strSunset[12] + strSunset[13] + strSunset[14] + strSunset[15] + strSunset[16] + strSunset[17] + strSunset[18]
-		return sunsetTime 			#Returns a string - format: [HH:MM:SS] 24h clock
+		sunsetTime = strSunset[11] + strSunset[12] + strSunset[14] + strSunset[15] + strSunset[17] + strSunset[18]
+		return int(sunsetTime) 			#Returns a int - format: [HHMMSS] 24h clock
 
 	def getWindSpeed(self):
 		windSpeedStatus = weatherData["current_conditions"]["wind"]["speed"]
@@ -79,6 +79,10 @@ class CWeather:
 	def getVisibility(self):
 		visibilityStatus =  weatherData["current_conditions"]["visibility"]
 		return float(visibilityStatus)		#Returns float value - units: km
+
+	def getWeatherData(self):
+		data = [getCondition(self), getTemperature(self), getSunRiseTime(self), getSunSetTime(self), getWindSpeed(self), getVisibility(self)] 	#default weather, clear, 26 degrees, sunrise 7am, 7pm sunset, 15km/h winds, 10km Visibility
+		return data
 ##############################################################################################		
 
 
@@ -168,7 +172,7 @@ count = 0
 setStatus = "Clear" 
 
 def PlayWeatherStatusTrack(status):
-	if setStatus != status:
+	if setStatus != status or setStatus == "mute":
 		mixer.music.stop()
 	else:
 		continue

@@ -172,6 +172,7 @@ def PlayWeatherStatusTrack(status):
 		mixer.music.stop()
 	else:
 		continue
+	
 	if (mixer.music.get_busy() == False):
 		if status == ("Cloud" or "Fog"):
 			setStatus = status

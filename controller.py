@@ -185,11 +185,9 @@ def weatherMirrorMode(cycle, duty_cycles, WEATHER):
 
         #set the sound based on conditions
         if AUDIO_EN == 1:
-            audio_shit = CloudFunctions.PlayWeatherStatusTrack(current_weather_status, WEATHER[0], music_count)
-            current_weather_status = audio_shit[0]
-            music_count = audio_shit[1]
+            current_weather_status, music_count = CloudFunctions.PlayWeatherStatusTrack(current_weather_status, WEATHER[0], music_count)
         else:
-            CloudFunctions.PlayWeatherStatusTrack(current_weather_status, "mute", music_count)
+            current_weather_status, music_count = CloudFunctions.PlayWeatherStatusTrack(current_weather_status, WEATHER[0], music_count)
 
         #check the limits and swap dir if needed
 	if cycle[COUNT] >= 100:

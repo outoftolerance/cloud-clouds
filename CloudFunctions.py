@@ -17,22 +17,26 @@ from pygame import mixer
 setLocation = "CAXX0518"		# Vancouver-Canada
 setCity = "Vancouver"
 
+# Add to global variables:
+count = 0
+setStatus = "Clear"
+
 
 ############################# Weather Class ##################################################
 # Input: String - "City", String - "LOCATION", String - units (default metric)
 ##############################################################################################	
 class CWeather:
 
-	def _init_(self, setCity, setLocation, setUnits = "metric"):
+	def __init__(self, setCity, setLocation, setUnits = "metric"):
 		self.location = setLocation
 		self.units = setUnits
 		self.city = setCity
-		weatherData = pywapi.get_weather_from_weather_com(self.location, units = self.units )
-		astrology = Astral()
-		sunLocation = astrology[self.city]
+		self.weatherData = pywapi.get_weather_from_weather_com(self.location, units = self.units )
+		self.astrology = Astral()
+		self.sunLocation = self.astrology[self.city]
 
 	def getCondition(self):
-		conditionStatus = weatherData["current_conditions"]["text"]
+		conditionStatus = self.weatherData["current_conditions"]["text"]
 
 		# 7 Catagories - returns a string: Cloud, Sun, Rain, Snow, Storm, Fog... default: Clear
 		if conditionStatus == ("Cloudy" or "Partly Cloudy" or "Mostly Cloudy" or "Overcast"):
@@ -45,39 +49,42 @@ class CWeather:
 			return "Snow"
 		elif conditionStatus == ("Storm" or "Thunderstorm" or "Chance of Thunderstorm" or "Chance of Storm" or "Scattered Thunderstorms"):
 			return "Storm"
-		elif weatherStatus == ("Fog" or "Smoke" or "Dust" or "Haze" or "Mist"):
+		elif conditionStatus == ("Fog" or "Smoke" or "Dust" or "Haze" or "Mist"):
 			return "Fog"
 		else:
 			#the default daytime setting
 			return "Clear"
 
 	def getTemperature(self):
-		temperatureStatus = weatherData["current_conditions"]["temperature"]
+		temperatureStatus = self.weatherData["current_conditions"]["temperature"]
 		return float(temperatureStatus)		#Returns a float value - units: Celcius
 
 	def getSunRiseTime(self):
-		sunriseStatus = sunLocation.sun(date = datetime.date.today(), local = True)
+		sunriseStatus = self.sunLocation.sun(date = datetime.date.today(), local = True)
 		strSunrise = str(sunriseStatus["sunrise"])
-		sunriseTime = strSunrise[11] + strSunrise[12] + strSunrise[14] + strSunrise[15] + strSunrise[17] + strSunrise[18]
+		sunriseTime = strSunrise[11] + strSunrise[12] + strSunrise[14] + strSunrise[15]
 		return int(sunriseTime) 			#Returns a int - format: [HHMMSS] 24h clock
 
 
 	def getSunSetTime(self):
-		sunsetStatus = sunLocation.sun(date = datetime.date.today(), local = True)
+		sunsetStatus = self.sunLocation.sun(date = datetime.date.today(), local = True)
 		strSunset = str(sunsetStatus["sunset"])
-		sunsetTime = strSunset[11] + strSunset[12] + strSunset[14] + strSunset[15] + strSunset[17] + strSunset[18]
+		sunsetTime = strSunset[11] + strSunset[12] + strSunset[14] + strSunset[15]
 		return int(sunsetTime) 			#Returns a int - format: [HHMMSS] 24h clock
 
 	def getWindSpeed(self):
-		windSpeedStatus = weatherData["current_conditions"]["wind"]["speed"]
+		windSpeedStatus = self.weatherData["current_conditions"]["wind"]["speed"]
+		if windSpeedStatus == "calm":
+                        windSpeedStatus = 0
 		return float(windSpeedStatus)		#Returns a float value - units: km/h
 
 	def getVisibility(self):
-		visibilityStatus =  weatherData["current_conditions"]["visibility"]
+		visibilityStatus = self.weatherData["current_conditions"]["visibility"]
 		return float(visibilityStatus)		#Returns float value - units: km
 
 	def getWeatherData(self):
-		data = [getCondition(self), getTemperature(self), getSunRiseTime(self), getSunSetTime(self), getWindSpeed(self), getVisibility(self)] 	#default weather, clear, 26 degrees, sunrise 7am, 7pm sunset, 15km/h winds, 10km Visibility
+                #default weather, clear, 26 degrees, sunrise 7am, 7pm sunset, 15km/h winds, 10km Visibility
+		data = [self.getCondition(), self.getTemperature(), self.getSunRiseTime(), self.getSunSetTime(), self.getWindSpeed(), self.getVisibility()]
 		return data
 ##############################################################################################		
 
@@ -87,7 +94,7 @@ class CWeather:
 # Output: Plays sound until track ends
 # Note: Ensure file location is set to - /home/pi/Documents/cloud-clouds/Sounds/
 def PlaySound(noise):
-	mixer.init()
+	#mixer.init()
 
 	if noise == "night1":
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Cricket1.mp3")
@@ -161,15 +168,14 @@ def PlaySound(noise):
 #					dayStatus: Sunrise, Sunset
 #					nightStuats: Night
 #					Default: Waves and Stream
-# Output: Plays Sound Tracks
+# Output: Plays Sound Tracks 
 
-# Add to global variables:
-count = 0
-setStatus = "Clear" 
-
-def PlayWeatherStatusTrack(status):
+def PlayWeatherStatusTrack(setStatus, status, count):
+        mixer.init()
 	if setStatus != status or setStatus == "mute":
-		mixer.music.stop()
+                count = 0
+                if mixer.music.get_busy() == True:
+                        mixer.music.stop()
 	
 	if (mixer.music.get_busy() == False):
 		if status == ("Cloud" or "Fog"):

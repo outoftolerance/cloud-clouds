@@ -24,18 +24,20 @@ DAY_BRIGHTNESS = 1                      #Brightness multiplier for the day
 DAY_ACCENT_BRIGHTNESS = 1               #brightness of the accents in day
 NIGHT_BRIGHTNESS = 0.1                  #Brightness multiplier for the night
 NIGHT_ACCENT_BRIGHTNESS = 0.2           #brightness of the accents at night
-WEATHER = ["Clear",26,0,1900,15,20]	#default weather, clear, 26 degrees, sunrise 7am, 7pm sunset, 15km/h winds, 20km visibility
+WEATHER = ["Clear",26,0700,1900,15,20]	#default weather, clear, 26 degrees, sunrise 7am, 7pm sunset, 15km/h winds, 20km visibility
 SUNRISE = WEATHER[2]                    #default sunrise time
 SUNSET = WEATHER[3]                     #default sunset time
 PULSE_RATE = 1                          #default pulse rate, smaller = faster
 COUNT = 0
 DIRECTION = 1
+current_weather_status = "Clear"
+music_count = 0
 
 #setup a location object for weather
-#location = CWeather(LOCATION, UNITS)
+location = CloudFunctions.CWeather(CITY, LOCATION, UNITS)
 
 #get the latest weather from location
-#WEATHER = location.getWeatherData()
+WEATHER = location.getWeatherData()
 
 #open the settings file and grab all our globals from there
 with open("settings.conf", "r") as f:
@@ -52,7 +54,7 @@ with open("settings.conf", "r") as f:
         elif setting[0] == "default_colour":
         	DEFAULT_COLOUR = string.split(setting[1].rstrip(), ",")
         elif setting[0] == "audio_enable":
-        	AUDIO_EN = setting[1].rstrip()
+        	AUDIO_EN = int(setting[1].rstrip())
         elif setting[0] == "day_colour":
         	DAY_COLOUR = string.split(setting[1].rstrip(), ",")
         elif setting[0] == "night_colour":
@@ -142,7 +144,9 @@ def pulseMode(cycle, duty_cycles, DEFAULT_COLOUR):
 def weatherMirrorMode(cycle, duty_cycles, WEATHER):
 	"Outputs duty cycle values based on weather outside"
 	#get the latest weather from the weather object
-	#WEATHER = weather.getWeatherData()
+	WEATHER = location.getWeatherData()
+	SUNRISE = WEATHER[2]
+	SUNSET = WEATHER[3]
 
 	#get the current time
         time = datetime.datetime.now().time();
@@ -169,7 +173,7 @@ def weatherMirrorMode(cycle, duty_cycles, WEATHER):
             #set the main lamp colour
             for channel in range(0, 3, 3):
 		for colour in range (0, 3, 1):
-                    duty_cycles[channel + colour] = int(float(DAY_BRIGHTNESS) * float(int(DAY_COLOUR[colour])))
+                    duty_cycles[channel + colour] = int(fl636oat(DAY_BRIGHTNESS) * float(int(DAY_COLOUR[colour])))
 
             #set the accent channel colours
             for channel in range(3, 9, 3):
@@ -178,11 +182,9 @@ def weatherMirrorMode(cycle, duty_cycles, WEATHER):
 
         #set the sound based on conditions
         if AUDIO_EN == 1:
-            #PlayWeatherStatusTrack(WEATHER[0])
-            print "sound"
+            CloudFunctions.PlayWeatherStatusTrack(current_weather_status, WEATHER[0], music_count)
         else:
-            #PlayWeatherStatusTrack("mute")
-            print "mute"
+            CloudFunctions.PlayWeatherStatusTrack(current_weather_status, "mute", music_count)
 
         #check the limits and swap dir if needed
 	if cycle[COUNT] >= 100:

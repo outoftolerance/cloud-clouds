@@ -6,6 +6,8 @@ import sys
 import pigpio
 import string
 
+import CloudFunctions
+
 #setup a pi object
 pi = pigpio.pi()
 
@@ -19,10 +21,13 @@ DEFAULT_COLOUR = [255, 255, 255]	#default colour shown in lamp and pulse mode
 DAY_COLOUR = [255, 255, 255]            #colour for the day mode
 NIGHT_COLOUR = [50, 100, 200]           #colour for the night mode
 DAY_BRIGHTNESS = 1                      #Brightness multiplier for the day
+DAY_ACCENT_BRIGHTNESS = 1               #brightness of the accents in day
 NIGHT_BRIGHTNESS = 0.1                  #Brightness multiplier for the night
-WEATHER = ["Clear",26,0700,1900,15]	#default weather, clear, 26 degrees, sunrise 7am, 7pm sunset, 15km/h winds
-SUNRISE = 0700                          #default sunrise time
-SUNSET = 2358                           #default sunset time
+NIGHT_ACCENT_BRIGHTNESS = 0.2           #brightness of the accents at night
+WEATHER = ["Clear",26,0,1900,15,20]	#default weather, clear, 26 degrees, sunrise 7am, 7pm sunset, 15km/h winds, 20km visibility
+SUNRISE = WEATHER[2]                    #default sunrise time
+SUNSET = WEATHER[3]                     #default sunset time
+PULSE_RATE = 1                          #default pulse rate, smaller = faster
 COUNT = 0
 DIRECTION = 1
 
@@ -30,7 +35,7 @@ DIRECTION = 1
 #location = CWeather(LOCATION, UNITS)
 
 #get the latest weather from location
-#WEATHER = location.getStatus()
+#WEATHER = location.getWeatherData()
 
 #open the settings file and grab all our globals from there
 with open("settings.conf", "r") as f:
@@ -56,6 +61,12 @@ with open("settings.conf", "r") as f:
         	DAY_BRIGHTNESS = setting[1].rstrip()
         elif setting[0] == "night_brightness":
         	NIGHT_BRIGHTNESS = setting[1].rstrip()
+        elif setting[0] == "day_accent_brightness":
+        	DAY_ACCENT_BRIGHTNESS = setting[1].rstrip()
+        elif setting[0] == "night_accent_brightness":
+        	NIGHT_ACCENT_BRIGHTNESS = setting[1].rstrip()
+        elif setting[0] == "pulse_rate":
+        	PULSE_RATE = float(setting[1].rstrip())
         else:
         	print "\nSetting in config file not recognised %s" % line
 
@@ -120,9 +131,9 @@ def pulseMode(cycle, duty_cycles, DEFAULT_COLOUR):
 
 	#increment/decrement the counter based on direction
 	if cycle[DIRECTION] == 1:
-		cycle[COUNT] = cycle[COUNT] + 1
+		cycle[COUNT] = cycle[COUNT] + PULSE_RATE
 	else:
-		cycle[COUNT] = cycle[COUNT] - 1
+		cycle[COUNT] = cycle[COUNT] - PULSE_RATE
 
         return
 
@@ -131,34 +142,67 @@ def pulseMode(cycle, duty_cycles, DEFAULT_COLOUR):
 def weatherMirrorMode(cycle, duty_cycles, WEATHER):
 	"Outputs duty cycle values based on weather outside"
 	#get the latest weather from the weather object
-	#WEATHER = weather.getStatus()
-
-	#set the LED colour based on conditions
-		#check if it's sunrise
-		#check if it's sunset
+	#WEATHER = weather.getWeatherData()
 
 	#get the current time
         time = datetime.datetime.now().time();
         time = string.split(str(time), ':')
-        time = time[0] + time[1]
-        print time
+        time = int(time[0] + time[1])
 
         #check where in the day night cycle we are
 	if (time < SUNRISE and time < SUNSET) or (time > SUNRISE and time > SUNSET):
             #we are in the night time, put lights into night colour mode
             print "Night time!"
-            print SUNSET
-            for channel in range(0, 9, 3):
+
+            #set the main lamp colour
+            for channel in range(0, 3, 3):
 		for colour in range (0, 3, 1):
                     duty_cycles[channel + colour] = int(float(NIGHT_BRIGHTNESS) * float(int(NIGHT_COLOUR[colour])))
+
+            #set the accent channel colours
+            for channel in range(3, 9, 3):
+		for colour in range (0, 3, 1):
+                    duty_cycles[channel + colour] = int((float(cycle[COUNT])/100.0) * float(NIGHT_ACCENT_BRIGHTNESS) * float(int(NIGHT_COLOUR[colour])))
         else:
             #we are in the day time, put lights into day colour mode
             print "Day time!"
-            for channel in range(0, 9, 3):
+            #set the main lamp colour
+            for channel in range(0, 3, 3):
 		for colour in range (0, 3, 1):
                     duty_cycles[channel + colour] = int(float(DAY_BRIGHTNESS) * float(int(DAY_COLOUR[colour])))
 
-	#set the sound based on conditions
+            #set the accent channel colours
+            for channel in range(3, 9, 3):
+		for colour in range (0, 3, 1):
+                    duty_cycles[channel + colour] = int((float(cycle[COUNT])/100.0) * float(DAY_ACCENT_BRIGHTNESS) * float(int(DAY_COLOUR[colour])))
+
+        #set the sound based on conditions
+        if AUDIO_EN == 1:
+            #PlayWeatherStatusTrack(WEATHER[0])
+            print "sound"
+        else:
+            #PlayWeatherStatusTrack("mute")
+            print "mute"
+
+        #check the limits and swap dir if needed
+	if cycle[COUNT] >= 100:
+		cycle[COUNT] = 100
+		if cycle[DIRECTION] == 1:
+			cycle[DIRECTION] = 0
+		else:
+			cycle[DIRECTION] = 1
+	elif cycle[COUNT] <= 0:
+		cycle[COUNT] = 0
+		if cycle[DIRECTION] == 1:
+			cycle[DIRECTION] = 0
+		else:
+			cycle[DIRECTION] = 1
+
+	#increment/decrement the counter based on direction
+	if cycle[DIRECTION] == 1:
+		cycle[COUNT] = cycle[COUNT] + PULSE_RATE
+	else:
+		cycle[COUNT] = cycle[COUNT] - PULSE_RATE
                                                         
         return
 

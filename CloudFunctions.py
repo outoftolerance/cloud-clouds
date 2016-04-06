@@ -8,10 +8,6 @@ import time
 import datetime				# Structure defined as datetime(Year, Month, Day, Hour, Minute Second, Millisecond)
 import pigpio				# Pi GPIO library
 
-#### Remove this once all functions have been transfered to this file
-import controller
-####
-
 # Need to install - enter: pip install astral
 from astral import Astral 	# Class with functions for calculating sunrise-sunset times
 # Need to install - enter: pip install pygame
@@ -153,7 +149,7 @@ def PlaySound(noise):
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Waves.wav")
 	elif noise == "sun2":
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Stream.wav")
-	else
+	else:
 		print("ERROR")
 
 	mixer.music.play()
@@ -174,8 +170,6 @@ setStatus = "Clear"
 def PlayWeatherStatusTrack(status):
 	if setStatus != status or setStatus == "mute":
 		mixer.music.stop()
-	else:
-		continue
 	
 	if (mixer.music.get_busy() == False):
 		if status == ("Cloud" or "Fog"):
@@ -242,7 +236,7 @@ def PlayWeatherStatusTrack(status):
 				PlaySound("thunder3")
 			if count >= 2:
 				count = 0
-			else
+			else:
 				count += 1
 		elif status == "Clear":
 			setStatus = status
@@ -258,7 +252,7 @@ def PlayWeatherStatusTrack(status):
 				PlaySound("clear5")
 			if count >= 4:
 				count = 0
-			else
+			else:
 				count += 1
 		elif status == "Sunrise":
 			setStatus = status
@@ -287,7 +281,5 @@ def PlayWeatherStatusTrack(status):
 				count = 0
 			else:
 				count += 1
-	else:
-		continue
 
 #####################################################################################################

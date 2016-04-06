@@ -94,8 +94,6 @@ class CWeather:
 # Output: Plays sound until track ends
 # Note: Ensure file location is set to - /home/pi/Documents/cloud-clouds/Sounds/
 def PlaySound(noise):
-	#mixer.init()
-
 	if noise == "night1":
 		mixer.music.load("/home/pi/Documents/cloud-clouds/Sounds/Cricket1.mp3")
 	elif noise == "night2":
@@ -279,6 +277,7 @@ def PlayWeatherStatusTrack(setStatus, status, count):
 			else:
 				count += 1
 		else:
+                        setStatus = status
 			if count == 0:
 				PlaySound("sun1")
 			if count == 1:
@@ -287,5 +286,7 @@ def PlayWeatherStatusTrack(setStatus, status, count):
 				count = 0
 			else:
 				count += 1
+
+        return [setStatus, count]
 
 #####################################################################################################

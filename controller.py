@@ -142,6 +142,9 @@ def pulseMode(cycle, duty_cycles, DEFAULT_COLOUR):
 
 #function which runs the duty cycles for weather mode
 def weatherMirrorMode(cycle, duty_cycles, WEATHER):
+        global current_weather_status
+        global music_count
+        
 	"Outputs duty cycle values based on weather outside"
 	#get the latest weather from the weather object
 	WEATHER = location.getWeatherData()
@@ -182,7 +185,9 @@ def weatherMirrorMode(cycle, duty_cycles, WEATHER):
 
         #set the sound based on conditions
         if AUDIO_EN == 1:
-            CloudFunctions.PlayWeatherStatusTrack(current_weather_status, WEATHER[0], music_count)
+            audio_shit = CloudFunctions.PlayWeatherStatusTrack(current_weather_status, WEATHER[0], music_count)
+            current_weather_status = audio_shit[0]
+            music_count = audio_shit[1]
         else:
             CloudFunctions.PlayWeatherStatusTrack(current_weather_status, "mute", music_count)
 
